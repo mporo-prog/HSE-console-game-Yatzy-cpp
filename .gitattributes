@@ -1,0 +1,8 @@
+# Git сам приводит окончания строк к LF в репозитории
+* text=auto
+
+*.cpp text eol=lf
+*.h   text eol=lf
+*.txt text eol=lf
+*.md  text eol=lf
+*.yml text eol=lf

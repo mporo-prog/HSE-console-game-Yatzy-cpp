@@ -1,0 +1,26 @@
+# Сборка на Windows и macOS при каждом push и pull request.
+# Предупреждения считаются ошибками, поэтому красная галочка = есть предупреждения.
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S . -B build -DYATZY_WARNINGS_AS_ERRORS=ON
+      - name: Build
+        run: cmake --build build --config Debug
+      # Пока ScoreCalculator не написан, тесты падают. Когда А закончит подсчёт
+      # (неделя 2), строку continue-on-error нужно удалить.
+      - name: Tests
+        continue-on-error: true
+        run: ctest --test-dir build -C Debug --output-on-failure

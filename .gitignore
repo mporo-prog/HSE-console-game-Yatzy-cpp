@@ -1,0 +1,34 @@
+# Папки сборки
+build/
+cmake-build-*/
+out/
+
+# Visual Studio
+.vs/
+*.vcxproj.user
+*.suo
+*.user
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+
+# CLion / VS Code
+.idea/
+.vscode/
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Скомпилированные файлы
+*.o
+*.obj
+*.exe
+*.out
+
+# Файлы, которые создаёт игра
+yatzy_save.txt
+yatzy_highscores.txt
