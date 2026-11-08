@@ -31,11 +31,14 @@ endfunction()
 # ============================================================
 
 # --- Логика игры (всё, кроме main.cpp) ---
-# add_library(yatzy_core STATIC
-#     src/Category.cpp
-#     src/Dice.cpp
-#     # ... новые .cpp добавлять сюда
-# )
+ add_library(yatzy_core STATIC
+         src/DiceSet.cpp
+         src/Category.cpp
+         src/ScoreCalculator.cpp
+         src/ScoreCard.cpp
+         src/Player.cpp
+         # ... новые .cpp добавлять сюда
+ )
 # target_include_directories(yatzy_core PUBLIC include)
 # yatzy_set_warnings(yatzy_core)
 
