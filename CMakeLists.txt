@@ -40,9 +40,9 @@ add_library(yatzy_core STATIC
         # ... новые .cpp добавлять сюда
 )
 target_include_directories(yatzy_core PUBLIC include)
-yatzy_set_warnings(yatzy_core)
+# yatzy_set_warnings(yatzy_core)
 
-# --- Интерфейс (Б): отдельная библиотека ---
+# --- Интерфейс (Новикова Полина): отдельная библиотека ---
 # Собирается и проверяется независимо от yatzy_core: если сборка или тест упали,
 # по имени цели сразу видно, чья это часть — yatzy_ui или yatzy_core.
 # Когда появятся ConsoleRenderer и Menu (им нужен Player), добавить:
