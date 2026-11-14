@@ -8,6 +8,9 @@ on:
 
 jobs:
   build:
+    # Если что-то зависло (например, тест ждёт нажатия кнопки в окне ошибки MSVC),
+    # задача прервётся через 15 минут, а не через 6 часов по умолчанию.
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -19,8 +22,9 @@ jobs:
         run: cmake -S . -B build -DYATZY_WARNINGS_AS_ERRORS=ON
       - name: Build
         run: cmake --build build --config Debug
-      # Пока ScoreCalculator не написан, тесты падают. Когда А закончит подсчёт
-      # (неделя 2), строку continue-on-error нужно удалить.
+      # Пока в ScoreCalculator нет проверки кубиков вне диапазона, часть тестов падает.
+      # Когда влит PR Пилипенко Дмитрия и все тесты проходят, строку continue-on-error нужно удалить.
+      # --timeout 60: зависший тест через минуту считается упавшим.
       - name: Tests
         continue-on-error: true
-        run: ctest --test-dir build -C Debug --output-on-failure
+        run: ctest --test-dir build -C Debug --output-on-failure --timeout 60
