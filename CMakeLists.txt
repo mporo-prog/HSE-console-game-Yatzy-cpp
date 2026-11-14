@@ -38,10 +38,11 @@ add_library(yatzy_core STATIC
         src/ScoreCard.cpp
         src/Player.cpp
         src/Text.cpp
+        src/Game.cpp
         # ... новые .cpp добавлять сюда
 )
+
 target_include_directories(yatzy_core PUBLIC include)
-# Включить, когда влит PR Пилипенко Дмитрия с исправлением предупреждений:
 yatzy_set_warnings(yatzy_core)
 
 # --- Интерфейс (Новикова Полина): отдельная библиотека ---
@@ -53,6 +54,7 @@ add_library(yatzy_ui STATIC
         src/Console.cpp
         src/InputReader.cpp
 )
+
 target_include_directories(yatzy_ui PUBLIC include)
 yatzy_set_warnings(yatzy_ui)
 
