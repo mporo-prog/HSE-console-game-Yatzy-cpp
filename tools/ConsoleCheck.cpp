@@ -26,7 +26,10 @@ namespace
         {"серый", ConsoleColor::Gray},
         {"обычный", ConsoleColor::Default},
     };
-    constexpr int COLOR_COUNT = static_cast<int>(sizeof(COLORS) / sizeof(COLORS[0]));
+    constexpr std::size_t COLOR_COUNT = sizeof(COLORS) / sizeof(COLORS[0]);
+
+    constexpr const char* ALIGNMENT_ROWS[] = {"Единицы", "Большой стрит", "Яцзы", "Ёлка"};
+    constexpr std::size_t ALIGNMENT_ROW_COUNT = sizeof(ALIGNMENT_ROWS) / sizeof(ALIGNMENT_ROWS[0]);
 
     /// Текст для проверки цвета, если пользователь ничего не ввёл.
     constexpr const char* SAMPLE_TEXT = "Яцзы: Каре, Фул-хаус, Большой стрит — 40 очков";
@@ -39,9 +42,9 @@ namespace
     void showAllColors()
     {
         showColorStatus();
-        for (const NamedColor& item : COLORS)
+        for (std::size_t i = 0; i < COLOR_COUNT; ++i)
         {
-            Console::printColored(item.name, item.color);
+            Console::printColored(COLORS[i].name, COLORS[i].color);
             std::cout << ' ';
         }
         std::cout << "\n\n";
@@ -50,11 +53,10 @@ namespace
     void showAlignment()
     {
         std::cout << "Выравнивание:\n";
-        const char* rows[] = {"Единицы", "Большой стрит", "Яцзы", "Ёлка"};
-        for (const char* row : rows)
+        for (std::size_t i = 0; i < ALIGNMENT_ROW_COUNT; ++i)
         {
             std::cout << "│ ";
-            Console::printPadded(row, 14);
+            Console::printPadded(ALIGNMENT_ROWS[i], 14);
             std::cout << "│\n";
         }
         std::cout << '\n';
@@ -87,14 +89,14 @@ namespace
     /// Пользователь выбирает цвет и видит в нём свой текст или пример.
     void checkChosenColor(InputReader& reader)
     {
-        for (int i = 0; i < COLOR_COUNT; ++i)
+        for (std::size_t i = 0; i < COLOR_COUNT; ++i)
         {
             std::cout << "  " << (i + 1) << " — ";
             Console::printColored(COLORS[i].name, COLORS[i].color);
             std::cout << '\n';
         }
-        const int choice = reader.readInt("Номер цвета: ", 1, COLOR_COUNT);
-        const NamedColor& chosen = COLORS[choice - 1];
+        const int choice = reader.readInt("Номер цвета: ", 1, static_cast<int>(COLOR_COUNT));
+        const NamedColor& chosen = COLORS[static_cast<std::size_t>(choice) - 1];
 
         char text[INPUT_BUFFER_SIZE];
         reader.readLine("Текст для проверки (Enter — пример): ", text, INPUT_BUFFER_SIZE);

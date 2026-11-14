@@ -36,7 +36,7 @@ namespace
 #endif
 
     /// Сколько пустых строк печатать вместо очистки экрана, если цветов нет.
-    constexpr int FALLBACK_CLEAR_LINES = 40;
+    constexpr std::size_t FALLBACK_CLEAR_LINES = 40;
 
     /// Возвращает ANSI-код цвета.
     /// Коды: красный 31, зелёный 32, жёлтый 33, синий 34, пурпурный 35,
@@ -99,7 +99,7 @@ namespace
 
 #ifdef _WIN32
     /// Максимальная длина строки в символах UTF-16 при чтении из консоли Windows.
-    constexpr DWORD WIDE_LINE_CAPACITY = 1024;
+    constexpr std::size_t WIDE_LINE_CAPACITY = 1024;
     /// Код символа Ctrl+Z: в консоли Windows он означает конец ввода.
     constexpr wchar_t CTRL_Z = 0x1A;
 
@@ -142,7 +142,7 @@ namespace
     ReadStatus readConsoleLine(HANDLE input, char* buffer, std::size_t capacity)
     {
         wchar_t wideLine[WIDE_LINE_CAPACITY];
-        DWORD length = 0;
+        std::size_t length = 0;
         bool tooLong = false;
         bool lineEnded = false;
 
@@ -155,7 +155,7 @@ namespace
                 buffer[0] = '\0';
                 return ReadStatus::EndOfInput;
             }
-            for (DWORD i = 0; i < readCount; ++i)
+            for (std::size_t i = 0; i < readCount; ++i)
             {
                 if (chunk[i] == L'\n')
                 {
@@ -271,7 +271,7 @@ namespace Console
             std::cout << "\x1b[2J\x1b[H";
             return;
         }
-        for (int i = 0; i < FALLBACK_CLEAR_LINES; ++i)
+        for (std::size_t i = 0; i < FALLBACK_CLEAR_LINES; ++i)
         {
             std::cout << '\n';
         }
