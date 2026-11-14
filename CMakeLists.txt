@@ -37,6 +37,8 @@ endfunction()
          src/ScoreCalculator.cpp
          src/ScoreCard.cpp
          src/Player.cpp
+         include/Game.h
+         src/Game.cpp
          # ... новые .cpp добавлять сюда
  )
 # target_include_directories(yatzy_core PUBLIC include)
