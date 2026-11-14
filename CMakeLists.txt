@@ -37,9 +37,11 @@ add_library(yatzy_core STATIC
         src/ScoreCalculator.cpp
         src/ScoreCard.cpp
         src/Player.cpp
+        src/Text.cpp
         # ... новые .cpp добавлять сюда
 )
 target_include_directories(yatzy_core PUBLIC include)
+# Включить, когда влит PR Пилипенко Дмитрия с исправлением предупреждений:
 # yatzy_set_warnings(yatzy_core)
 
 # --- Интерфейс (Новикова Полина): отдельная библиотека ---
@@ -60,14 +62,19 @@ yatzy_set_warnings(yatzy_ui)
 # yatzy_set_warnings(yatzy)
 
 # --- Тесты: на каждый файл тестов — три строки + add_test ---
-# enable_testing()
-# add_executable(yatzy_tests tests/ScoreCalculatorTests.cpp)
-# target_link_libraries(yatzy_tests PRIVATE yatzy_core)
-# yatzy_set_warnings(yatzy_tests)
-# add_test(NAME score_calculator COMMAND yatzy_tests)
+enable_testing()
+
+add_executable(yatzy_tests tests/ScoreCalculatorTests.cpp)
+target_link_libraries(yatzy_tests PRIVATE yatzy_core)
+yatzy_set_warnings(yatzy_tests)
+add_test(NAME score_calculator COMMAND yatzy_tests)
+
+add_executable(yatzy_score_card_tests tests/ScoreCardTests.cpp)
+target_link_libraries(yatzy_score_card_tests PRIVATE yatzy_core)
+yatzy_set_warnings(yatzy_score_card_tests)
+add_test(NAME score_card COMMAND yatzy_score_card_tests)
 
 # --- Тесты интерфейса (Новикова Полина) ---
-enable_testing()
 
 add_executable(console_tests tests/ConsoleTests.cpp)
 target_link_libraries(console_tests PRIVATE yatzy_ui)
@@ -78,6 +85,11 @@ add_executable(input_reader_tests tests/InputReaderTests.cpp)
 target_link_libraries(input_reader_tests PRIVATE yatzy_ui)
 yatzy_set_warnings(input_reader_tests)
 add_test(NAME input_reader COMMAND input_reader_tests)
+
+add_executable(text_tests tests/TextTests.cpp)
+target_link_libraries(text_tests PRIVATE yatzy_core)
+yatzy_set_warnings(text_tests)
+add_test(NAME text COMMAND text_tests)
 
 # --- Ручная проверка консоли: цвета, выравнивание, ввод кириллицы ---
 add_executable(console_check tools/ConsoleCheck.cpp)
