@@ -1,14 +1,25 @@
-﻿#include "../include/Player.h"
+﻿
+#include "../include/Player.h"
+#include "../include/Text.h"
 
+Player::Player() = default;
 
-Player::Player(const std::string& playerName) {
-    name = playerName;
+Player::Player(const char* name) {
+    setName(name);
 }
 
-const std::string& Player::getName() const {
-    return name;
+void Player::setName(const char* name) {
+    Text::copy(m_name, MAX_NAME_SIZE, name);
+}
+
+const char* Player::getName() const {
+    return m_name;
 }
 
 ScoreCard& Player::getScoreCard() {
-    return scoreCard;
+    return m_scoreCard;
+}
+
+const ScoreCard& Player::getScoreCard() const {
+    return m_scoreCard;
 }

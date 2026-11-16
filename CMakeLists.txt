@@ -42,7 +42,7 @@ add_library(yatzy_core STATIC
 )
 target_include_directories(yatzy_core PUBLIC include)
 # Включить, когда влит PR Пилипенко Дмитрия с исправлением предупреждений:
-# yatzy_set_warnings(yatzy_core)
+yatzy_set_warnings(yatzy_core)
 
 # --- Интерфейс (Новикова Полина): отдельная библиотека ---
 # Собирается и проверяется независимо от yatzy_core: если сборка или тест упали,

@@ -35,11 +35,12 @@ const char* getCategoryName(Category category) {
         case Category::LargeStraight:
             return "LargeStraight";
 
-        case Category::Yatzee:
+        case Category::Yatzy:
             return "Yahtzee";
 
         case Category::Chance:
             return "Chance";
     }
+
     return "Unknown";
 }

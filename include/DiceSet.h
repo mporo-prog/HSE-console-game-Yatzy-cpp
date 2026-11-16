@@ -1,28 +1,42 @@
-﻿#pragma once
+﻿
+#pragma once
 
-#include <random>
 #include <array>
+#include <random>
 
 class DiceSet {
-private:
-    std::random_device rd;
-    std::mt19937 gen{rd()};
-    std::uniform_int_distribution<> dis{1, 6};
-
-    std::array<int, 5> numbers{};
-    std::array<bool, 5> selected{};
-
 public:
-    /// Когда в int main пишешь DiceSet dice, то уже по умолчанию кидается кубик
+    /// Количество кубиков.
+    static constexpr int DICE_COUNT = 5;
+
+    /// Создаёт набор и сразу бросает все кубики.
     DiceSet();
-    /// Кидает заново кубики (кубики которые мы сохраняем остаются)
+
+    /// Перебрасывает все незафиксированные кубики.
     void roll();
-    /// Сохраняем 1 кубик (ИМЕННО КУБИК, а НЕ ЗНАЧЕНИЕ)
-    void holdDice(int index);
-    /// Перестаем сохранять кубик
-    void releaseDice(int index);
-    /// Возвращает все кубики
-    const std::array<int, 5>& getDice() const;
-    /// Убирает все "замки" на кубиках
+
+    /// Фиксирует кубик с индексом от 0 до 4.
+    bool holdDice(int index);
+
+    /// Снимает фиксацию с кубика.
+    bool releaseDice(int index);
+
+    /// Проверяет, зафиксирован ли кубик.
+    bool isHeld(int index) const;
+
+    /// Снимает фиксацию со всех кубиков.
     void resetDice();
+
+    /// Возвращает значения всех пяти кубиков.
+    const std::array<int, DICE_COUNT>& getDice() const;
+
+private:
+    /// Проверяет, что индекс находится в диапазоне 0-4.
+    static bool isValidIndex(int index);
+
+    std::mt19937 m_generator;
+    std::uniform_int_distribution<int> m_distribution{1, 6};
+
+    std::array<int, DICE_COUNT> m_values{};
+    std::array<bool, DICE_COUNT> m_held{};
 };

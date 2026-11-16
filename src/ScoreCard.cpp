@@ -1,51 +1,70 @@
 ﻿#include "../include/ScoreCard.h"
 
+namespace {
+
+    constexpr int UPPER_BONUS_THRESHOLD = 63;
+    constexpr int UPPER_BONUS = 35;
+
+}
 
 bool ScoreCard::isFilled(Category category) const {
-    int index = static_cast<int>(category);
-
-    return filled[index];
+    return m_filled[toIndex(category)];
 }
 
 bool ScoreCard::setScore(Category category, int score) {
-    int index = static_cast<int>(category);
+    const std::size_t index = toIndex(category);
 
-    if (filled[index] || score < 0) {
+    if (m_filled[index] || score < 0) {
         return false;
     }
-    filled[index] = true;
-    scores[index] = score;
+
+    m_filled[index] = true;
+    m_scores[index] = score;
+
     return true;
 }
 
 int ScoreCard::getScore(Category category) const {
-    int index = static_cast<int>(category);
+    const std::size_t index = toIndex(category);
 
-    if (!filled[index]) {
-        return -1;
+    return m_filled[index] ? m_scores[index] : -1;
+}
+
+int ScoreCard::getUpperSum() const {
+    int sum = 0;
+
+    for (std::size_t i = 0; i < UPPER_CATEGORY_COUNT; ++i) {
+        sum += m_scores[i];
     }
-    return scores[index];
+
+    return sum;
 }
 
 int ScoreCard::getUpperBonus() const {
-    int sum = 0;
-    for (int i = 0; i < 6; i++) {
-        sum += scores[i];
-    }
-    if (sum >= 63) {
-        return 35;
-    }
-    return 0;
+    return getUpperSum() >= UPPER_BONUS_THRESHOLD
+        ? UPPER_BONUS : 0;
 }
-
 
 int ScoreCard::getTotalScore() const {
     int sum = 0;
-    for (int i = 0; i < 13; i++) {
-        sum += scores[i];
+
+    for (std::size_t i = 0; i < m_scores.size(); ++i) {
+        sum += m_scores[i];
     }
 
-    sum += getUpperBonus();
+    return sum + getUpperBonus();
+}
 
-    return sum;
+bool ScoreCard::isComplete() const {
+    for (std::size_t i = 0; i < m_filled.size(); ++i) {
+        if (!m_filled[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+std::size_t ScoreCard::toIndex(Category category) {
+    return static_cast<std::size_t>(category);
 }

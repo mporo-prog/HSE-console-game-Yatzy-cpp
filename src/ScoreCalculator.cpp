@@ -1,142 +1,126 @@
-﻿#include "../include/ScoreCalculator.h"
+﻿
+#include "../include/ScoreCalculator.h"
 
-
-int ScoreCalculator::calculate(const std::array<int, 5> &dice, Category category) {
-
-    int sum = 0;
-
-    int counts[7] = {};
-    bool flag = false;
-    for (int i = 0; i < 5; i++) {
-        counts[dice[i]]++;
+int ScoreCalculator::calculate(
+    const std::array<int, 5>& dice,
+    Category category
+) {
+    if (!isValidDice(dice)) {
+        return 0;
     }
+
+    const Counts counts = countValues(dice);
 
     switch (category) {
-        case Category::Chance: {
-            for (int i = 0; i < 5; i++) {
-                sum += dice[i];
-            }
-            return sum;
-        }
-
-        case Category::Ones: {
-            for (int i = 0; i < 5; i++) {
-                if (dice[i] == 1) {
-                    sum += dice[i];
-                }
-            }
-            return sum;
-        }
-
-        case Category::Twos: {
-            for (int i = 0; i < 5; i++) {
-                if (dice[i] == 2) {
-                    sum += dice[i];
-                }
-            }
-            return sum;
-        }
-
-        case Category::Threes: {
-            for (int i = 0; i < 5; i++) {
-                if (dice[i] == 3) {
-                    sum += dice[i];
-                }
-            }
-            return sum;
-        }
-
-        case Category::Fours: {
-            for (int i = 0; i < 5; i++) {
-                if (dice[i] == 4) {
-                    sum += dice[i];
-                }
-            }
-            return sum;
-        }
-
-        case Category::Fives: {
-            for (int i = 0; i < 5; i++) {
-                if (dice[i] == 5) {
-                    sum += dice[i];
-                }
-            }
-            return sum;
-        }
-
+        case Category::Ones:
+        case Category::Twos:
+        case Category::Threes:
+        case Category::Fours:
+        case Category::Fives:
         case Category::Sixes: {
-            for (int i = 0; i < 5; i++) {
-                if (dice[i] == 6) {
-                    sum += dice[i];
-                }
-            }
-            return sum;
+            const int value = static_cast<int>(category) + 1;
+            return counts[static_cast<std::size_t>(value)] * value;
         }
 
-        case Category::ThreeOfAKind: {
-            for (int i = 0; i < 5; i++) {
-                sum += dice[i];
-            }
-            for (int i = 0; i < 7; i++) {
-                if (counts[i] >= 3) {
-                    flag = true;
-                }
-            }
-            return flag ? sum : 0;
-        }
+        case Category::ThreeOfAKind:
+            return hasSameValues(counts, 3) ? sumAll(dice) : 0;
 
-        case Category::FourOfAKind: {
-            for (int i = 0; i < 5; i++) {
-                sum += dice[i];
-            }
-            for (int i = 0; i < 7; i++) {
-                if (counts[i] >= 4) {
-                    flag = true;
-                }
-            }
-            return flag ? sum : 0;
-        }
+        case Category::FourOfAKind:
+            return hasSameValues(counts, 4) ? sumAll(dice) : 0;
 
-        case Category::Yatzee: {
-            for (int i = 0; i < 7; i++) {
-                if (counts[i] == 5) {
-                    flag = true;
-                }
-            }
-            return flag ? 50 : 0;
-        }
+        case Category::FullHouse:
+            return isFullHouse(counts) ? 25 : 0;
 
-        case Category::FullHouse: {
-            bool flagThree = false;
-            bool flagTwo = false;
+        case Category::SmallStraight:
+            return hasStraight(counts, 4) ? 30 : 0;
 
-            for (int i = 0; i < 7; i++) {
-                if (counts[i] == 3) {
-                    flagThree = true;
-                }
-                if (counts[i] == 2) {
-                    flagTwo = true;
-                }
-            }
-            return (flagThree && flagTwo) ? 25 : 0;
-        }
+        case Category::LargeStraight:
+            return hasStraight(counts, 5) ? 40 : 0;
 
-        case Category::SmallStraight: {
-            if ((counts[1] > 0 && counts[2] > 0 && counts[3] > 0 && counts[4] > 0) ||
-                (counts[2] > 0 && counts[3] > 0 && counts[4] > 0 && counts[5] > 0) ||
-                (counts[3] > 0 && counts[4] > 0 && counts[5] > 0 && counts[6] > 0)) {
-                flag = true;
-            }
-            return flag ? 30 : 0;
-        }
+        case Category::Yatzy:
+            return hasSameValues(counts, 5) ? 50 : 0;
 
-        case Category::LargeStraight: {
-            if ((counts[1] > 0 && counts[2] > 0 && counts[3] > 0 && counts[4] > 0 && counts[5] > 0) ||
-                (counts[2] > 0 && counts[3] > 0 && counts[4] > 0 && counts[5] > 0 && counts[6] > 0)) {
-                flag = true;
-            }
-            return flag ? 40 : 0;
+        case Category::Chance:
+            return sumAll(dice);
+    }
+
+    return 0;
+}
+
+bool ScoreCalculator::isValidDice(
+    const std::array<int, 5>& dice
+) {
+    for (std::size_t i = 0; i < dice.size(); ++i) {
+        if (dice[i] < 1 || dice[i] > 6) {
+            return false;
         }
     }
-    return 0;
+
+    return true;
+}
+
+ScoreCalculator::Counts ScoreCalculator::countValues(
+    const std::array<int, 5>& dice
+) {
+    Counts counts{};
+
+    for (std::size_t i = 0; i < dice.size(); ++i) {
+        ++counts[static_cast<std::size_t>(dice[i])];
+    }
+
+    return counts;
+}
+
+int ScoreCalculator::sumAll(
+    const std::array<int, 5>& dice
+) {
+    int sum = 0;
+
+    for (std::size_t i = 0; i < dice.size(); ++i) {
+        sum += dice[i];
+    }
+
+    return sum;
+}
+
+bool ScoreCalculator::hasSameValues(
+    const Counts& counts,
+    int minCount
+) {
+    for (std::size_t value = 1; value < counts.size(); ++value) {
+        if (counts[value] >= minCount) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool ScoreCalculator::isFullHouse(const Counts& counts) {
+    bool hasThree = false;
+    bool hasTwo = false;
+
+    for (std::size_t value = 1; value < counts.size(); ++value) {
+        hasThree = hasThree || counts[value] == 3;
+        hasTwo = hasTwo || counts[value] == 2;
+    }
+
+    return hasThree && hasTwo;
+}
+
+bool ScoreCalculator::hasStraight(
+    const Counts& counts,
+    int length
+) {
+    int run = 0;
+
+    for (std::size_t value = 1; value < counts.size(); ++value) {
+        run = counts[value] > 0 ? run + 1 : 0;
+
+        if (run >= length) {
+            return true;
+        }
+    }
+
+    return false;
 }
