@@ -139,18 +139,20 @@ void testStraights() {
 }
 
 /// Яцзы (5 одинаковых = 50) и Шанс (сумма всех).
-void testYatzyAndChance() {
+    void testYatzyAndChance() {
     const TestCase tests[] = {
-        {"яцзы единицы", {1, 1, 1, 1, 1}, Category::Yatzee, 50},
-        {"яцзы шестёрки", {6, 6, 6, 6, 6}, Category::Yatzee, 50},
-        {"каре не яцзы", {6, 6, 6, 6, 5}, Category::Yatzee, 0},
-        {"разные не яцзы", {1, 2, 3, 4, 5}, Category::Yatzee, 0},
+        {"яцзы единицы", {1, 1, 1, 1, 1}, Category::Yatzy, 50},
+        {"яцзы шестёрки", {6, 6, 6, 6, 6}, Category::Yatzy, 50},
+        {"каре не яцзы", {6, 6, 6, 6, 5}, Category::Yatzy, 0},
+        {"разные не яцзы", {1, 2, 3, 4, 5}, Category::Yatzy, 0},
         {"шанс минимум", {1, 1, 1, 1, 1}, Category::Chance, 5},
         {"шанс максимум", {6, 6, 6, 6, 6}, Category::Chance, 30},
         {"шанс смешанный", {1, 3, 4, 5, 6}, Category::Chance, 19},
     };
+
     checkAll(tests);
 }
+
 
 /// Кубики вне диапазона 1…6: в любой графе должно получаться 0,
 /// а не выход за границы массива подсчёта значений.
