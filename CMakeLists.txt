@@ -57,6 +57,18 @@ add_library(yatzy_ui STATIC
 
 target_include_directories(yatzy_ui PUBLIC include)
 yatzy_set_warnings(yatzy_ui)
+# --- Логика игры (всё, кроме main.cpp) ---
+ add_library(yatzy_core STATIC
+         src/DiceSet.cpp
+         src/Category.cpp
+         src/ScoreCalculator.cpp
+         src/ScoreCard.cpp
+         src/Player.cpp
+         src/Game.cpp
+         # ... новые .cpp добавлять сюда
+ )
+# target_include_directories(yatzy_core PUBLIC include)
+# yatzy_set_warnings(yatzy_core)
 
 # --- Игра ---
 # add_executable(yatzy src/main.cpp)
