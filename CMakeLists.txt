@@ -37,7 +37,6 @@ endfunction()
          src/ScoreCalculator.cpp
          src/ScoreCard.cpp
          src/Player.cpp
-         include/Game.h
          src/Game.cpp
          # ... новые .cpp добавлять сюда
  )
