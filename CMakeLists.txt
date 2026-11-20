@@ -37,18 +37,6 @@ add_library(yatzy_core STATIC
         # ... новые .cpp добавлять сюда
 )
 
-# --- Логика игры (всё, кроме main.cpp и интерфейса) ---
-add_library(yatzy_core STATIC
-        src/DiceSet.cpp
-        src/Category.cpp
-        src/ScoreCalculator.cpp
-        src/ScoreCard.cpp
-        src/Player.cpp
-        src/Text.cpp
-        src/Game.cpp
-        # ... новые .cpp добавлять сюда
-)
-
 target_include_directories(yatzy_core PUBLIC include)
 yatzy_set_warnings(yatzy_core)
 
